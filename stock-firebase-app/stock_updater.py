@@ -270,7 +270,15 @@ def main():
     
     # 解析結構化 JSON 資料
     try:
-        report_data = json.loads(ai_report_raw)
+        # 清理可能存在的 markdown code block 標籤 (如 ```json ... ```)
+        clean_report = ai_report_raw.strip()
+        if clean_report.startswith("```"):
+            import re
+            clean_report = re.sub(r"^```(?:json)?\n", "", clean_report)
+            clean_report = re.sub(r"\n```$", "", clean_report)
+        clean_report = clean_report.strip()
+        
+        report_data = json.loads(clean_report)
         overall_report = report_data.get("overall_report", "⚠️ 無法解析整體產業分析日報內容。")
         diagnoses = report_data.get("diagnoses", {})
     except Exception as parse_err:
