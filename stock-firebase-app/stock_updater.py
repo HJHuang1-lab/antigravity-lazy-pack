@@ -206,7 +206,7 @@ def upload_to_firestore(live_data, overall_report, diagnoses):
                 "stringValue": json.dumps(diagnoses, ensure_ascii=False)
             },
             "updated_at": {
-                "stringValue": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                "stringValue": datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).strftime('%Y-%m-%d %H:%M:%S')
             }
         }
     }
@@ -242,7 +242,7 @@ def save_local_backup(live_data, overall_report, diagnoses):
         "prices": live_data,
         "ai_report": overall_report,
         "diagnoses": diagnoses,
-        "updated_at": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        "updated_at": datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).strftime('%Y-%m-%d %H:%M:%S')
     }
     
     try:

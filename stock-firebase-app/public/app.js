@@ -41,7 +41,7 @@ function initDataLoad() {
 
 async function loadLocalData() {
   try {
-    const response = await fetch("data.json");
+    const response = await fetch("data.json?t=" + new Date().getTime());
     if (response.ok) {
       const data = await response.json();
       console.log("🎉 數據載入成功！");
