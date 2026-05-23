@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📊 記憶體產業與股市 AI 智能儀表板 — Firebase Premium</title>
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Chart.js Library via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Firebase SDK (Compat Version for Vanilla Scripting) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  
+  <!-- Markdown Parser (marked.js) to format Gemini output beautifully -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Animated Background Glows -->
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <div class="logo">
+          <div class="pulse-dot"></div>
+          <h1>記憶體產業與股市 AI 智能儀表板</h1>
+        </div>
+        <div class="conn-status" id="conn-status">
+          <i class="fa-solid fa-cloud-bolt text-glow-green"></i> 雲端同步連線中
+        </div>
+      </div>
+      <p class="subtitle">串聯 Google Search & Gemini 2.5 全球巨頭動態與台灣記憶體板塊的即時股市解讀 —— Firebase 雲端部署版</p>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main class="app-main">
+      <!-- Left Panel: Stock Price Cards -->
+      <section class="ticker-panel">
+        <div class="glass-header">
+          <h2><i class="fa-solid fa-chart-line icon-margin text-glow-blue"></i> 即時板塊行情</h2>
+          <span class="update-time" id="update-time">最後更新：讀取中...</span>
+        </div>
+        
+        <div class="ticker-grid" id="ticker-grid">
+          <!-- Live Stock Cards will be dynamically rendered here -->
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
+      </section>
+
+      <!-- Right Panel: Chart & AI Daily Report -->
+      <section class="report-panel">
+        <!-- Chart Section -->
+        <div class="glass-card chart-card">
+          <div class="chart-header">
+            <h3 id="chart-title"><i class="fa-solid fa-chart-area icon-margin text-glow-cyan"></i> 互動式歷史走勢圖表 (近一個月)</h3>
+            <span class="chart-subtitle" id="chart-subtitle">點擊左側股票卡片切換圖表</span>
+          </div>
+          <div class="chart-container">
+            <canvas id="price-chart"></canvas>
+          </div>
+        </div>
+
+        <!-- AI Report Section -->
+        <div class="glass-card ai-report-card">
+          <div class="report-header">
+            <h3 id="report-title"><i class="fa-solid fa-robot icon-margin text-glow-purple"></i> 🤖 AI 個股深度健檢診斷</h3>
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <button id="btn-toggle-report" class="btn-toggle">📋 查看整體產業日報</button>
+              <div class="report-badge">Gemini 2.5 Flash</div>
+            </div>
+          </div>
+          <div class="report-content markdown-body" id="report-content">
+            <div class="loading-report">
+              <div class="spinner"></div>
+              <p>正在由 Google Cloud Firestore 載入最新的 AI 深度分析日報...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>© 2026 Anti-Gravity 2 Premium ✕ 三師爸專屬授權. Powered by Google DeepMind, yfinance & Firebase.</p>
+    </footer>
+  </div>
+
+  <!-- Custom JavaScript Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

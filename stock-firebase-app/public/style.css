@@ -1,0 +1,515 @@
+/* 全域重設與字體設定 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #04020a;
+  color: #f8fafc;
+  font-family: 'Inter', 'Noto Sans TC', sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* 霓虹背景極光光暈效果 */
+.bg-glow {
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(150px);
+  opacity: 0.18;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.bg-glow-1 {
+  background: radial-gradient(circle, #38bdf8 0%, #818cf8 100%);
+  top: -100px;
+  right: -50px;
+  animation: float-glow 8s infinite alternate ease-in-out;
+}
+
+.bg-glow-2 {
+  background: radial-gradient(circle, #ec4899 0%, #a78bfa 100%);
+  bottom: -150px;
+  left: -100px;
+  animation: float-glow 12s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes float-glow {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, 30px) scale(1.15); }
+  100% { transform: translate(-30px, -20px) scale(0.9); }
+}
+
+/* 主要 Container */
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header 區塊 */
+.app-header {
+  margin-bottom: 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo h1 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 2rem;
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  color: #64748b;
+  font-size: 1rem;
+  margin-top: 8px;
+  max-width: 900px;
+  line-height: 1.5;
+}
+
+.conn-status {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+}
+
+/* 呼吸燈微動畫 */
+.pulse-dot {
+  height: 10px;
+  width: 10px;
+  background-color: #10b981;
+  border-radius: 50%;
+  display: inline-block;
+  animation: pulse-light 2s infinite;
+}
+
+@keyframes pulse-light {
+  0% { transform: scale(1); opacity: 0.7; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1.15); opacity: 1; box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+  100% { transform: scale(1); opacity: 0.7; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* 主要排版架構 (動態 Grid) */
+.app-main {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 25px;
+  flex: 1;
+}
+
+/* 玻璃擬態卡片通用屬性 */
+.glass-card {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  margin-bottom: 20px;
+}
+
+.glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.glass-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 0 5px;
+}
+
+.glass-header h2 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.update-time {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+/* 左側股票卡片清單 */
+.ticker-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.ticker-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 單張個股卡片樣式 */
+.stock-card {
+  background: rgba(255, 255, 255, 0.01);
+  border-radius: 12px;
+  padding: 16px 20px;
+  border-left: 5px solid #475569;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  border-right: 1px solid rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.stock-card:hover {
+  transform: translateY(-2px) scale(1.01);
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* 使用者要求：漲的數字是紅的，跌是綠的 (Taiwan Standard) */
+.stock-up {
+  border-left-color: #ef4444; /* 紅色 */
+}
+
+.stock-down {
+  border-left-color: #10b981; /* 綠色 */
+}
+
+/* 當前點擊選中的股票 (高亮狀態) */
+.stock-active {
+  background: rgba(56, 189, 248, 0.05) !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  border-left-width: 8px !important;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.15) !important;
+}
+
+.stock-card-top, .stock-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stock-card-bottom {
+  margin-top: 8px;
+  font-size: 0.85rem;
+}
+
+.stock-name {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #f1f5f9;
+}
+
+.stock-ticker {
+  color: #64748b;
+  font-weight: normal;
+  font-size: 0.85rem;
+  margin-left: 5px;
+}
+
+.stock-price {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1.35rem;
+}
+
+.stock-desc {
+  color: #64748b;
+  max-width: 240px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stock-change {
+  font-weight: 600;
+}
+
+/* 股票漲跌色系定義 */
+.color-up {
+  color: #ef4444 !important;
+}
+
+.color-down {
+  color: #10b981 !important;
+}
+
+.color-flat {
+  color: #94a3b8 !important;
+}
+
+/* 右側 Panel */
+.report-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 折線圖 Card */
+.chart-card {
+  padding: 24px;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 12px;
+}
+
+.chart-header h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.15rem;
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+.chart-subtitle {
+  font-size: 0.8rem;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(56, 189, 248, 0.15);
+}
+
+.chart-container {
+  position: relative;
+  height: 250px;
+  width: 100%;
+}
+
+/* AI 報告 Card */
+.ai-report-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 12px;
+}
+
+.report-header h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.15rem;
+  color: #e2e8f0;
+}
+
+.report-badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
+}
+
+.report-content {
+  flex: 1;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: #cbd5e1;
+  overflow-y: auto;
+  max-height: 500px;
+  padding-right: 10px;
+}
+
+/* Markdown 排版美化 */
+.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  color: #38bdf8;
+  margin: 20px 0 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 6px;
+}
+
+.markdown-body h2 {
+  font-size: 1.2rem;
+}
+
+.markdown-body h3 {
+  font-size: 1.05rem;
+}
+
+.markdown-body p {
+  margin-bottom: 12px;
+}
+
+.markdown-body ul, .markdown-body ol {
+  margin-bottom: 15px;
+  padding-left: 20px;
+}
+
+.markdown-body li {
+  margin-bottom: 6px;
+}
+
+.markdown-body blockquote {
+  background: rgba(129, 140, 248, 0.05);
+  border-left: 4px solid #818cf8;
+  padding: 12px 18px;
+  border-radius: 0 12px 12px 0;
+  margin: 15px 0;
+  font-style: italic;
+}
+
+.markdown-body strong {
+  color: #f1f5f9;
+  font-weight: 600;
+}
+
+/* CSS 載入動畫 (Spinner & Skeletion) */
+.loading-report {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 250px;
+  gap: 15px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.05);
+  border-top-color: #a855f7;
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.skeleton-card {
+  height: 75px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.01) 25%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.01) 75%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.5s infinite;
+  border-radius: 12px;
+}
+
+@keyframes loading-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Scrollbar 美化 */
+.report-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.report-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.01);
+  border-radius: 10px;
+}
+
+.report-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.report-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Footer */
+.app-footer {
+  margin-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 20px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #475569;
+}
+
+/* 霓虹字體效果 */
+.text-glow-green { color: #10b981; text-shadow: 0 0 10px rgba(16, 185, 129, 0.5); }
+.text-glow-blue { color: #38bdf8; text-shadow: 0 0 10px rgba(56, 189, 248, 0.5); }
+.text-glow-cyan { color: #06b6d4; text-shadow: 0 0 10px rgba(6, 182, 212, 0.5); }
+.text-glow-purple { color: #a855f7; text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); }
+
+.icon-margin {
+  margin-right: 8px;
+}
+
+/* 玻璃擬態切換按鈕 */
+.btn-toggle {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #38bdf8;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.btn-toggle:hover {
+  background: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-toggle:active {
+  transform: translateY(0);
+}
+
+/* RWD 響應式佈局 (Mobile Adaptation) */
+@media (max-width: 1024px) {
+  .app-main {
+    grid-template-columns: 1fr;
+  }
+  
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .conn-status {
+    align-self: flex-start;
+  }
+  
+  .chart-container {
+    height: 220px;
+  }
+}
