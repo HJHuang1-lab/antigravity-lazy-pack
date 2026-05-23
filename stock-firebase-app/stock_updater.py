@@ -269,22 +269,50 @@ def main():
     ai_report_raw = generate_ai_report(live_data)
     
     # 解析結構化 JSON 資料
-    try:
-        # 清理可能存在的 markdown code block 標籤 (如 ```json ... ```)
-        clean_report = ai_report_raw.strip()
-        if clean_report.startswith("```"):
-            import re
-            clean_report = re.sub(r"^```(?:json)?\n", "", clean_report)
-            clean_report = re.sub(r"\n```$", "", clean_report)
-        clean_report = clean_report.strip()
-        
-        report_data = json.loads(clean_report)
-        overall_report = report_data.get("overall_report", "⚠️ 無法解析整體產業分析日報內容。")
-        diagnoses = report_data.get("diagnoses", {})
-    except Exception as parse_err:
-        print(f"⚠️ 解析結構化報告失敗，改用純文字降級容錯：{parse_err}")
-        overall_report = ai_report_raw
-        diagnoses = {}
+    is_gemini_failed = "❌" in ai_report_raw or "failed" in ai_report_raw.lower() or "limit" in ai_report_raw.lower() or "exhausted" in ai_report_raw.lower()
+    
+    overall_report = ""
+    diagnoses = {}
+    
+    if is_gemini_failed:
+        print("⚠️ 偵測到 Gemini API 調用失敗（可能為 429 額度超限）。嘗試讀取並保留前一次更新的 AI 報告...")
+        try:
+            # 嘗試讀取本地現有的 public/data.json
+            if os.path.exists("public/data.json"):
+                with open("public/data.json", "r", encoding="utf-8") as f:
+                    old_data = json.load(f)
+                overall_report = old_data.get("ai_report", "")
+                diagnoses = old_data.get("diagnoses", {})
+                
+                # 在舊日報最前頭加上友善提示，告知使用者目前的 API 額度限制，但資料照常更新
+                disclaimer = "⚠️ *目前 Gemini API 雲端額度已達單日上限（免費版每日限制 20 次），系統已自動為您保留前一次更新的 AI 分析報告。個股價格數據已順利刷新。*\n\n"
+                if overall_report and disclaimer not in overall_report:
+                    overall_report = disclaimer + overall_report
+                print("🎉 成功載入並保留前一次更新的 AI 報告！")
+            else:
+                overall_report = ai_report_raw
+                diagnoses = {}
+        except Exception as read_old_err:
+            print(f"⚠️ 讀取前一次備份失敗：{read_old_err}")
+            overall_report = ai_report_raw
+            diagnoses = {}
+    else:
+        try:
+            # 清理可能存在的 markdown code block 標籤 (如 ```json ... ```)
+            clean_report = ai_report_raw.strip()
+            if clean_report.startswith("```"):
+                import re
+                clean_report = re.sub(r"^```(?:json)?\n", "", clean_report)
+                clean_report = re.sub(r"\n```$", "", clean_report)
+            clean_report = clean_report.strip()
+            
+            report_data = json.loads(clean_report)
+            overall_report = report_data.get("overall_report", "⚠️ 無法解析整體產業分析日報內容。")
+            diagnoses = report_data.get("diagnoses", {})
+        except Exception as parse_err:
+            print(f"⚠️ 解析結構化報告失敗，改用純文字降級容錯：{parse_err}")
+            overall_report = ai_report_raw
+            diagnoses = {}
     
     # 3. 備份到本地
     save_local_backup(live_data, overall_report, diagnoses)
