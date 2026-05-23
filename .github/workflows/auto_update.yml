@@ -9,6 +9,9 @@ on:
 jobs:
   update-and-deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: stock-firebase-app # 關鍵設定：讓所有命令在子目錄中執行
 
     steps:
     - name: Checkout repository
