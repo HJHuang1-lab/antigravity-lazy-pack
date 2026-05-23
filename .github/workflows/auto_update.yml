@@ -12,6 +12,8 @@ jobs:
     defaults:
       run:
         working-directory: stock-firebase-app # 關鍵設定：讓所有命令在子目錄中執行
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
     - name: Checkout repository
